@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Code Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .card-body {
+            background-color: #fff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .form-row {
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">CRUD Code Generator</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'generate_code' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="db_name">Database Name</label>
+                        <input type="text" class="form-control" id="db_name" name="db_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="table_name">Table Name</label>
+                        <input type="text" class="form-control" id="table_name" name="table_name" required>
+                    </div>
+                    <div id="columns-container">
+                        <label for="columns">Column Names and Data Types</label>
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <input type="text" class="form-control" id="column_name_1" name="columns[]" placeholder="Column Name" required>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <select class="form-control" id="column_type_1" name="data_types[]" required>
+                                    <option value="">Select Data Type</option>
+                                    <option value="int">int</option>
+                                    <option value="float">float</option>
+                                    <option value="date">date</option>
+                                    <option value="varchar">varchar</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="add-column">Add More Columns</button>
+                    <button type="submit" class="btn btn-primary">Generate Code</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let columnIndex = 1;
+        document.getElementById('add-column').addEventListener('click', function() {
+            columnIndex++;
+            const container = document.getElementById('columns-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'form-row';
+            newRow.innerHTML = `
+                <div class="form-group col-md-5">
+                    <input type="text" class="form-control" id="column_name_${columnIndex}" name="columns[]" placeholder="Column Name" required>
+                </div>
+                <div class="form-group col-md-5">
+                    <select class="form-control" id="column_type_${columnIndex}" name="data_types[]" required>
+                        <option value="">Select Data Type</option>
+                        <option value="int">int</option>
+                        <option value="float">float</option>
+                        <option value="date">date</option>
+                        <option value="varchar">varchar</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(newRow);
+        });
+    </script>
+</body>
+</html>

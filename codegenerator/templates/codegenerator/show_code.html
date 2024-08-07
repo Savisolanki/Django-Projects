@@ -1,0 +1,104 @@
+<!-- show_code.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Code</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .code-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+        pre {
+            white-space: pre-wrap; /* Allow wrapping */
+            word-break: break-all; /* Break long words */
+        }
+        .btn-back {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-back:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'generate_code' %}" class="btn btn-back mb-3">Back to Form</a>
+        <button type="button" class="btn btn-secondary" id="generate_project">Generate Django Project</button>
+        <div class="code-section">
+            <div class="code-header">
+                <h5>Models Code</h5>
+            </div>
+            <pre><code>{{ model_code|safe }}</code></pre>
+        </div>
+        <div class="code-section">
+            <div class="code-header">
+                <h5>Views Code</h5>
+            </div>
+            <pre><code>{{ views_code|safe }}</code></pre>
+        </div>
+        <div class="code-section">
+            <div class="code-header">
+                <h5>HTML Template Code</h5>
+            </div>
+            <pre><code>{{ index_html_code }}</code></pre>
+        </div>
+        <div class="code-section">
+            <div class="code-header">
+                <h5>Edit Template Code</h5>
+            </div>
+            <pre><code>{{ edit_html_code }}</code></pre>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $('#generate_project').click(function(){
+                $.ajax({
+                    url: "{% url 'create_django_project' %}",
+                    type: "POST",
+                    data: {
+                        'db_name': '{{ db_name }}',
+                        'table_name': '{{ table_name }}',
+                        'columns': {{ columns|safe }},
+                        'data_type': {{ data_type|safe }},
+                        'source_folder': '{{ folder_path }}',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response){
+                        console.log(this.data);
+                        alert(response.message);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(this.data);
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
