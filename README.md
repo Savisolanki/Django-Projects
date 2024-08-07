@@ -1,4 +1,4 @@
-CRUD Code Generator in Django
+#CRUD Code Generator in Django
 
 
 Project Overview:-
